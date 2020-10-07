@@ -213,6 +213,7 @@ export default {
                 message: "移除成功!",
               });
               this.allTasks[pos].deleted = 1;
+              this.allTasks[pos].deletetime = res.data.data;
             })
             .catch((error) => {
               console.log(error);
@@ -250,6 +251,7 @@ export default {
             .then((res) => {
               this.allTasks[pos].task = res.data.data.task;
               this.allTasks[pos].tag = res.data.data.tag;
+              this.allTasks[pos].editstatus = "编辑";
               this.$message({
                 type: "success",
                 message: "修改内容提交成功！",
@@ -359,7 +361,8 @@ export default {
       axios
         .post("http://localhost:9010/todolist/api", jsonData)
         .then((res) => {
-          this.allTasks.push(res.data.data);
+          // this.allTasks.push(res.data.data);
+          this.allTasks.unshift(res.data.data);
           this.input = "";
         })
         .catch((error) => {
