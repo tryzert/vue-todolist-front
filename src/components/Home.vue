@@ -115,7 +115,7 @@
 // import "bootstrap/dist/js/bootstrap.min.js";
 import Card from "./Card";
 import RecyclebinCard from "./RecyclebinCard";
-import axios from "axios";
+
 export default {
   components: {
     Card,
@@ -150,18 +150,16 @@ export default {
     },
   },
   created() {
-    axios
-      .post("http://localhost:9010/todolist/api", {
-        code: 100,
-        data: "",
-      })
+    this.$axios.post("todolist/api", {
+      code: 100,
+      data: "",
+    })
       .then((res) => {
         if (res.data.data.length > 0) {
           this.allTasks = res.data.data;
         }
       })
       .catch((error) => {
-        console.log(error);
         this.$message({
           showClose: true,
           message: "请求服务器数据出错！",
@@ -179,8 +177,8 @@ export default {
           done: Math.pow(0, this.allTasks[pos].done),
         },
       };
-      axios
-        .post("http://localhost:9010/todolist/api", jsonData)
+      this.$axios
+        .post("/todolist/api", jsonData)
         .then((res) => {
           this.allTasks[pos].done = !this.allTasks[pos].done;
         })
@@ -205,8 +203,8 @@ export default {
         type: "warning",
       })
         .then(() => {
-          axios
-            .post("http://localhost:9010/todolist/api", jsonData)
+          this.$axios
+            .post("/todolist/api", jsonData)
             .then((res) => {
               this.$message({
                 type: "success",
@@ -246,8 +244,8 @@ export default {
               content: value,
             },
           };
-          axios
-            .post("http://localhost:9010/todolist/api", jsonData)
+          this.$axios
+            .post("/todolist/api", jsonData)
             .then((res) => {
               this.allTasks[pos].task = res.data.data.task;
               this.allTasks[pos].tag = res.data.data.tag;
@@ -285,8 +283,8 @@ export default {
         type: "warning",
       })
         .then(() => {
-          axios
-            .post("http://localhost:9010/todolist/api", jsonData)
+          this.$axios
+            .post("/todolist/api", jsonData)
             .then((res) => {
               this.$message({
                 type: "success",
@@ -316,7 +314,6 @@ export default {
         code: 105,
         data: id,
       };
-      console.log("delete");
       this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -324,8 +321,8 @@ export default {
         center: true,
       })
         .then(() => {
-          axios
-            .post("http://localhost:9010/todolist/api", jsonData)
+          this.$axios
+            .post("/todolist/api", jsonData)
             .then((res) => {
               this.allTasks.splice(pos, 1);
               this.$message({
@@ -358,8 +355,8 @@ export default {
         code: 106,
         data: intext,
       };
-      axios
-        .post("http://localhost:9010/todolist/api", jsonData)
+      this.$axios
+        .post("/todolist/api", jsonData)
         .then((res) => {
           // this.allTasks.push(res.data.data);
           this.allTasks.unshift(res.data.data);
@@ -394,7 +391,6 @@ export default {
 }
 
 .header-right a {
-  /* text-decoration: none; */
   color: black;
 }
 
@@ -414,5 +410,9 @@ export default {
 #recyclebin {
   font-size: 15px;
   color: rgb(245, 44, 18);
+}
+
+.el-message-box {
+  width: 100%;
 }
 </style>
