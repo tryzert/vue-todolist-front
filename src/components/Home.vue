@@ -150,11 +150,13 @@ export default {
     },
   },
   created() {
+    
     this.$axios.post("todolist/api", {
       code: 100,
       data: "",
     })
       .then((res) => {
+        this.$toast("数据更新成功！");
         if (res.data.data.length > 0) {
           this.allTasks = res.data.data;
         }
@@ -181,6 +183,7 @@ export default {
         .post("/todolist/api", jsonData)
         .then((res) => {
           this.allTasks[pos].done = !this.allTasks[pos].done;
+          this.$toast("数据更新成功！");
         })
         .catch((error) => {
           console.log(error);
@@ -212,6 +215,7 @@ export default {
               });
               this.allTasks[pos].deleted = 1;
               this.allTasks[pos].deletetime = res.data.data;
+              this.allTasks[pos].lefttime = 366;
             })
             .catch((error) => {
               console.log(error);
@@ -412,7 +416,5 @@ export default {
   color: rgb(245, 44, 18);
 }
 
-.el-message-box {
-  width: 100%;
-}
+
 </style>

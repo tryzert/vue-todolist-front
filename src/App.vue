@@ -10,8 +10,9 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style>
+.el-message-box {
+  max-width: 95%;
+}
 
 </style>
