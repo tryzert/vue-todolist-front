@@ -15,7 +15,7 @@ import axios from 'axios'
 
 Vue.prototype.$toast = Toast;
 
-axios.defaults.baseURL = 'http://localhost:9010';
+// axios.defaults.baseURL = 'http://localhost:9010';
 Vue.prototype.$axios = axios;
 
 

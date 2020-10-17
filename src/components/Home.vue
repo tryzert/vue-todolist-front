@@ -111,8 +111,6 @@
 </template>
 
 <script>
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.min.js";
 import Card from "./Card";
 import RecyclebinCard from "./RecyclebinCard";
 
@@ -150,13 +148,16 @@ export default {
     },
   },
   created() {
-    
-    this.$axios.post("todolist/api", {
-      code: 100,
-      data: "",
-    })
+    this.$axios
+      .post("todolist/api", {
+        code: 100,
+        data: "",
+      })
       .then((res) => {
-        this.$toast("数据更新成功！");
+        this.$toast({
+          type: "success",
+          message: "数据更新成功！",
+        });
         if (res.data.data.length > 0) {
           this.allTasks = res.data.data;
         }
@@ -183,7 +184,11 @@ export default {
         .post("/todolist/api", jsonData)
         .then((res) => {
           this.allTasks[pos].done = !this.allTasks[pos].done;
-          this.$toast("数据更新成功！");
+          this.$message({
+            showClose: true,
+            message: "请求服务器数据出错！",
+            type: "error",
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -415,6 +420,4 @@ export default {
   font-size: 15px;
   color: rgb(245, 44, 18);
 }
-
-
 </style>
