@@ -186,15 +186,14 @@ export default {
           this.allTasks[pos].done = !this.allTasks[pos].done;
           this.$message({
             showClose: true,
-            message: "请求服务器数据出错！",
-            type: "error",
+            message: "数据更新成功！",
+            type: "success",
           });
         })
         .catch((error) => {
-          console.log(error);
           this.$message({
             showClose: true,
-            message: "向服务器请求更新数据出错！",
+            message: "请求服务器数据出错！",
             type: "error",
           });
         });
@@ -367,7 +366,6 @@ export default {
       this.$axios
         .post("/todolist/api", jsonData)
         .then((res) => {
-          // this.allTasks.push(res.data.data);
           this.allTasks.unshift(res.data.data);
           this.input = "";
         })
