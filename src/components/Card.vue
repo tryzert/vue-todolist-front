@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="right">
-          <div class="head">&nbsp;{{date}}&nbsp;{{time}}&nbsp;{{editstatus}}</div>
+          <div class="head">&nbsp;{{date}}&nbsp;&nbsp;{{time}}&nbsp;{{editstatus}}</div>
           <div class="body">{{task}}</div>
           <div class="foot">
               <span v-if="tag != ''">&nbsp;{{tag}}</span>              

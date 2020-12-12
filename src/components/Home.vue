@@ -150,22 +150,29 @@ export default {
   created() {
     this.$axios
       .post("todolist/api", {
-        code: 100,
+        code: 1000,
         data: "",
       })
       .then((res) => {
-        this.$toast({
-          type: "success",
-          message: "数据更新成功！",
-        });
-        if (res.data.data.length > 0) {
-          this.allTasks = res.data.data;
+        if (res.data.code === 1000) {
+          if (res.data.data.length > 0) {
+            this.allTasks = res.data.data;
+          }
+          this.$toast({
+            type: "success",
+            message: "数据更新成功！",
+          });
+        } else {
+          this.$toast({
+            type: "error",
+            message: res.data.tip,
+          });
         }
       })
       .catch((error) => {
         this.$message({
           showClose: true,
-          message: "请求服务器数据出错！",
+          message: "请求数据时网络出错！",
           type: "error",
         });
       });
@@ -174,7 +181,7 @@ export default {
     getstatus(id) {
       var pos = this.allTasks.findIndex((n) => n.id == id);
       var jsonData = {
-        code: 101,
+        code: 1001,
         data: {
           id: id,
           done: Math.pow(0, this.allTasks[pos].done),
@@ -183,17 +190,25 @@ export default {
       this.$axios
         .post("/todolist/api", jsonData)
         .then((res) => {
-          this.allTasks[pos].done = !this.allTasks[pos].done;
-          this.$message({
-            showClose: true,
-            message: "数据更新成功！",
-            type: "success",
-          });
+          if (res.data.code === 1001) {
+            this.allTasks[pos].done = !this.allTasks[pos].done;
+            this.$message({
+              showClose: true,
+              message: "数据更新成功！",
+              type: "success",
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.data.tip,
+              type: "error",
+            });
+          }
         })
         .catch((error) => {
           this.$message({
             showClose: true,
-            message: "请求服务器数据出错！",
+            message: "请求数据时网络出错！",
             type: "error",
           });
         });
@@ -201,7 +216,7 @@ export default {
     getremove(id) {
       var pos = this.allTasks.findIndex((n) => n.id == id);
       var jsonData = {
-        code: 103,
+        code: 1003,
         data: id,
       };
       this.$confirm("稍后你可以在回收站中找到它, 继续吗?", "移除该记录", {
@@ -213,19 +228,27 @@ export default {
           this.$axios
             .post("/todolist/api", jsonData)
             .then((res) => {
-              this.$message({
-                type: "success",
-                message: "移除成功!",
-              });
-              this.allTasks[pos].deleted = 1;
-              this.allTasks[pos].deletetime = res.data.data;
-              this.allTasks[pos].lefttime = 366;
+              if (res.data.code === 1003) {
+                this.$message({
+                  type: "success",
+                  message: "移除成功!",
+                });
+                this.allTasks[pos].deleted = 1;
+                this.allTasks[pos].deletetime = res.data.data;
+                this.allTasks[pos].lefttime = 366;
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: res.data.tip,
+                  type: "error",
+                });
+              }
             })
             .catch((error) => {
               console.log(error);
               this.$message({
                 showClose: true,
-                message: "向服务器请求更新数据出错！",
+                message: "更新数据时网络出错！",
                 type: "error",
               });
             });
@@ -246,7 +269,7 @@ export default {
       })
         .then(({ value }) => {
           var jsonData = {
-            code: 102,
+            code: 1002,
             data: {
               id: id,
               content: value,
@@ -255,19 +278,26 @@ export default {
           this.$axios
             .post("/todolist/api", jsonData)
             .then((res) => {
-              this.allTasks[pos].task = res.data.data.task;
-              this.allTasks[pos].tag = res.data.data.tag;
-              this.allTasks[pos].editstatus = "编辑";
-              this.$message({
-                type: "success",
-                message: "修改内容提交成功！",
-              });
+              if (res.data.code === 1002) {
+                this.allTasks[pos].task = res.data.data.task;
+                this.allTasks[pos].tag = res.data.data.tag;
+                this.allTasks[pos].editstatus = "编辑";
+                this.$message({
+                  type: "success",
+                  message: "修改内容提交成功！",
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.data.tip,
+                });
+              }
             })
             .catch((error) => {
               console.log(error);
               this.$message({
                 showClose: true,
-                message: "向服务器请求更新数据出错！",
+                message: "更新数据时网络出错！",
                 type: "error",
               });
             });
@@ -282,7 +312,7 @@ export default {
     getrecover(id) {
       var pos = this.allTasks.findIndex((n) => n.id == id);
       var jsonData = {
-        code: 104,
+        code: 1004,
         data: id,
       };
       this.$confirm("将此记录恢复到以前的位置, 继续吗?", "恢复", {
@@ -294,17 +324,24 @@ export default {
           this.$axios
             .post("/todolist/api", jsonData)
             .then((res) => {
-              this.$message({
-                type: "success",
-                message: "恢复成功!",
-              });
-              this.allTasks[pos].deleted = 0;
+              if (res.data.code === 1004) {
+                this.$message({
+                  type: "success",
+                  message: "恢复成功!",
+                });
+                this.allTasks[pos].deleted = 0;
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.data.tip,
+                });
+              }
             })
             .catch((error) => {
               console.log(error);
               this.$message({
                 showClose: true,
-                message: "向服务器请求更新数据出错！",
+                message: "更新数据时网络出错！",
                 type: "error",
               });
             });
@@ -319,7 +356,7 @@ export default {
     getdelete(id) {
       var pos = this.allTasks.findIndex((n) => n.id == id);
       var jsonData = {
-        code: 105,
+        code: 1005,
         data: id,
       };
       this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
@@ -332,16 +369,23 @@ export default {
           this.$axios
             .post("/todolist/api", jsonData)
             .then((res) => {
-              this.allTasks.splice(pos, 1);
-              this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
+              if (res.data.code === 1005) {
+                this.allTasks.splice(pos, 1);
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.data.tip,
+                });
+              }
             })
             .catch((error) => {
               this.$message({
                 showClose: true,
-                message: "向服务器请求更新数据出错！",
+                message: "更新数据时网络出错！",
                 type: "error",
               });
             });
@@ -360,20 +404,28 @@ export default {
         return;
       }
       var jsonData = {
-        code: 106,
+        code: 1006,
         data: intext,
       };
       this.$axios
         .post("/todolist/api", jsonData)
         .then((res) => {
-          this.allTasks.unshift(res.data.data);
-          this.input = "";
+          if (res.data.code === 1006) {
+            this.allTasks.unshift(res.data.data);
+            this.input = "";
+          } else {
+            this.$message({
+              showClose: true,
+              message: res.data.tip,
+              type: "error",
+            });
+          }
         })
         .catch((error) => {
           console.log(error);
           this.$message({
             showClose: true,
-            message: "请求服务器数据出错！",
+            message: "请求数据时网络出错！",
             type: "error",
           });
         });
