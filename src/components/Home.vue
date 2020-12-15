@@ -281,6 +281,8 @@ export default {
               if (res.data.code === 1002) {
                 this.allTasks[pos].task = res.data.data.task;
                 this.allTasks[pos].tag = res.data.data.tag;
+                this.allTasks[pos].date = res.data.data.date;
+                this.allTasks[pos].time = res.data.data.time;
                 this.allTasks[pos].editstatus = "编辑";
                 this.$message({
                   type: "success",
